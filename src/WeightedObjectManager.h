@@ -6,13 +6,9 @@
 //
 //
 
-#ifndef __BaseApp__Weights__
-#define __BaseApp__Weights__
-
+#pragma once
 
 #include "ofMain.h"
-#include "CH_Constants.h"
-
 
 float multiplicableWeight(float weight);
 
@@ -132,4 +128,3 @@ private:
 };
 
 
-#endif /* defined(__BaseApp__Weights__) */
