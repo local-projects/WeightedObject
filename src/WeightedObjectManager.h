@@ -31,10 +31,9 @@ public:
 	float getWeight(){return weight;}
 	virtual string getWeightID() = 0; //must implement this! must return a 3-char string! for debug purposes
 
-
 	int getNumAppearances();
 
-	//should be > 1.0!
+	//should be > 1.0! ideally > 2.0!
 	//if one object has a min weight, and another one has max weight
 	//how many times more should one show up compared to the other one?
 	void setWeightGain(float g){ weightGain = g; }
@@ -91,7 +90,7 @@ public:
 	void setup(vector<Weightable*> allObjects);
 
 	//in case we get new objects on the fly / liveUpdate
-	void addExtraObjects(vector<Weightable*> newObjects);
+	//void addExtraObjects(vector<Weightable*> newObjects);
 
 	//let me know what's going on with the objects
 	void objectEnteredScreen(Weightable*);

@@ -82,7 +82,7 @@ void WeightedObjectManager::setup(vector<Weightable*> allObjects){
 		allObjects[i]->manager = this;
 	}
 
-	ofLogNotice() << "WeightedObjectManager shownObjects: " << shownObjects.size();
+	ofLogNotice("WeightedObjectManager") << "shownObjects: " << shownObjects.size();
 	onScreenObjects.clear();
 	allWeightedObjects = allObjects;
 }
@@ -101,9 +101,7 @@ void WeightedObjectManager::objectEnteredScreen(Weightable* o){
 
 		offsetCounterOnSet(o, shownObjects, 1); //inc that object's screen counter
 	}else{
-        #ifndef DONORS_TABLE
-		LOG_ERROR << "this object is not weighted";
-        #endif
+		ofLogError("WeightedObjectManager") << "this object is not weighted";
 	}
 }
 
@@ -121,13 +119,11 @@ void WeightedObjectManager::objectExitedScreen(Weightable* o){
 			}
 			if(it->second < 0){
 				it->second = 0;
-				LOG_FATAL_ERROR << "negative object count";
+				ofLogFatalError("WeightedObjectManager") << "negative object count";
 			}
 		}
 	}else{
-        #ifndef DONORS_TABLE
-		LOG_ERROR << "this object is not weighted";
-        #endif
+		ofLogError("WeightedObjectManager") << "this object is not weighted";
 	}
 }
 
@@ -157,15 +153,13 @@ Weightable* WeightedObjectManager::getNextObject(bool itsOkIfItsOnScreen){
 	if (myResult == NULL){
 		int index = floor(ofRandom(0, allWeightedObjects.size()));
 
-        if(!allWeightedObjects.size()){
-            LOG_WARNING << "no allWeightedObjects" ;
-            myResult = NULL;
+		if(!allWeightedObjects.size()){
+			ofLogWarning("WeightedObjectManager") << "no allWeightedObjects" ;
+			myResult = NULL;
         }else{
-            myResult = allWeightedObjects[index];
-            #ifndef DONORS_TABLE
-            LOG_WARNING << "not enough different objects to show on screen, showing random object" ;
-            #endif
-        }	
+			myResult = allWeightedObjects[index];
+			ofLogWarning("WeightedObjectManager") << "not enough different objects to show on screen, showing random object" ;
+        }
 	}
 	return myResult;
 }
@@ -247,22 +241,24 @@ void WeightedObjectManager::drawDebug(int x, int y, int limit){
 		if(c > limit) break;
 	}
 
+	int DEBUG_LINE_HEIGHT = 16;
+	ofColor debugBgColor = ofColor::black;
 	ofDrawBitmapStringHighlight("## OnScreen Total Counters + weights ##############",
-								x, y - DEBUG_LINE_HEIGHT , DEBUG_TXT_BG_COLOR, ofColor::white);
+								x, y - DEBUG_LINE_HEIGHT , debugBgColor, ofColor::white);
 
-	ofDrawBitmapStringHighlight(out[0], x, y, DEBUG_TXT_BG_COLOR, ofColor::yellow);
-	ofDrawBitmapStringHighlight(out[1], x, y + DEBUG_LINE_HEIGHT * 1, DEBUG_TXT_BG_COLOR, ofColor::yellow);
-	ofDrawBitmapStringHighlight(out[2], x, y + DEBUG_LINE_HEIGHT * 2, DEBUG_TXT_BG_COLOR, ofColor::yellow);
-	ofDrawBitmapStringHighlight(out[3], x, y + DEBUG_LINE_HEIGHT * 3, DEBUG_TXT_BG_COLOR, ofColor::yellow);
+	ofDrawBitmapStringHighlight(out[0], x, y, debugBgColor, ofColor::yellow);
+	ofDrawBitmapStringHighlight(out[1], x, y + DEBUG_LINE_HEIGHT * 1, debugBgColor, ofColor::yellow);
+	ofDrawBitmapStringHighlight(out[2], x, y + DEBUG_LINE_HEIGHT * 2, debugBgColor, ofColor::yellow);
+	ofDrawBitmapStringHighlight(out[3], x, y + DEBUG_LINE_HEIGHT * 3, debugBgColor, ofColor::yellow);
 
 	ofDrawBitmapStringHighlight("## OnScreen Objects ##############",
-								x, y +  DEBUG_LINE_HEIGHT * 4.5, DEBUG_TXT_BG_COLOR, ofColor::white);
+								x, y +  DEBUG_LINE_HEIGHT * 4.5, debugBgColor, ofColor::white);
 
 	string screenObjs;
 	for(int i = 0; i < onScreenObjects.size(); i++){
 		screenObjs += "[" + onScreenObjects[i]->getWeightID() + "] ";
 	}
-	ofDrawBitmapStringHighlight(screenObjs, x, y + DEBUG_LINE_HEIGHT * 5.5, DEBUG_TXT_BG_COLOR, ofColor::green);
+	ofDrawBitmapStringHighlight(screenObjs, x, y + DEBUG_LINE_HEIGHT * 5.5, debugBgColor, ofColor::green);
 
 }
 
