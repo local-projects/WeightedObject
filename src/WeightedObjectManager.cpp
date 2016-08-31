@@ -81,8 +81,7 @@ void WeightedObjectManager::setup(vector<Weightable*> allObjects){
 		shownObjects.insert(make_pair(allObjects[i], 1));
 		allObjects[i]->manager = this;
 	}
-
-	ofLogNotice("WeightedObjectManager") << "shownObjects: " << shownObjects.size();
+	//ofLogNotice("WeightedObjectManager") << "shownObjects: " << shownObjects.size();
 	onScreenObjects.clear();
 	allWeightedObjects = allObjects;
 }
