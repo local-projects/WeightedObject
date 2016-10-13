@@ -86,32 +86,40 @@ void WeightedObjectManager::setup(vector<Weightable*> allObjects){
 	allWeightedObjects = allObjects;
 }
 
-void WeightedObjectManager::addExtraObjects(vector<Weightable*> newObjects){
+
+void WeightedObjectManager::addExtraObjects(vector<Weightable*> newObjects, bool resetCounters){
 
 	if(newObjects.size() == 0) return;
 	
 	std::random_shuffle(newObjects.begin(), newObjects.end());
 
+	WeightedObjectsSet newSet;
 	//when adding new objects, we reset all counters!
-	for(auto it : screenObjectCounter){
-		it.second = 0;
+	for(auto it : shownObjects){
+		if(resetCounters){
+			newSet.insert(make_pair(it.first, 1));
+		}else{
+			newSet.insert(make_pair(it.first, (int)ofRandom(1, 3)));
+		}
 	}
 
-	for(auto it : shownObjects){
-		it.second = 1;
+	for(auto & it : screenObjectCounter){
+		it.second = 0;
 	}
 
 	for(int i = 0; i < newObjects.size(); i++){
 		auto it = find(allWeightedObjects.begin(), allWeightedObjects.end(), newObjects[i]);
-		if(it != allWeightedObjects.end()){
+		if(it == allWeightedObjects.end()){
 			screenObjectCounter[newObjects[i]] = 0;
-			shownObjects.insert(make_pair(newObjects[i], 1));
+			newSet.insert(make_pair(newObjects[i], 1));
 			newObjects[i]->manager = this;
 			allWeightedObjects.push_back(newObjects[i]);
 		}else{
 			ofLogError("WeightedObjectManager") << "Trying to add weightable object that already exists! ignoring object!";
 		}
 	}
+	shownObjects = newSet; //overwrite the set, reset all counters
+
 }
 
 

@@ -90,7 +90,7 @@ public:
 	void setup(vector<Weightable*> allObjects);
 
 	//in case we get new objects on the fly / liveUpdate
-	void addExtraObjects(vector<Weightable*> newObjects);
+	void addExtraObjects(vector<Weightable*> newObjects, bool resetCounters);
 
 	//let me know what's going on with the objects
 	void objectEnteredScreen(Weightable*);
