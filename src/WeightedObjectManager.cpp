@@ -23,7 +23,7 @@ void Weightable::setupWeightData(float minWeight_, float maxWeight_, float weigh
 
 
 float Weightable::getMappedWeight(){ //remap the backend weigjht
-	float ret = ofMap(weight, minWeight, maxWeight, -1.0f, 1.0f);
+	float ret = ofMap(weight, minWeight, maxWeight, -1.0f, 1.0f, true);
 	return ret;
 }
 
@@ -34,7 +34,7 @@ float Weightable::multiplicableWeight(){
 		res = 1.0f + w * (weightGain - 1.0f);
 	}else{
 		w *= -1.0f; //remap weight to [0..1]; when zero, res =1; when 1, res = 1/mult
-		res = ofMap(w, 0.0f, 1.0f, 1.0f, 1.0f / weightGain);
+		res = ofMap(w, 0.0f, 1.0f, 1.0f, 1.0f / weightGain, true);
 	}
 	return res;
 }
@@ -84,6 +84,34 @@ void WeightedObjectManager::setup(vector<Weightable*> allObjects){
 	//ofLogNotice("WeightedObjectManager") << "shownObjects: " << shownObjects.size();
 	onScreenObjects.clear();
 	allWeightedObjects = allObjects;
+}
+
+void WeightedObjectManager::addExtraObjects(vector<Weightable*> newObjects){
+
+	if(newObjects.size() == 0) return;
+	
+	std::random_shuffle(newObjects.begin(), newObjects.end());
+
+	//when adding new objects, we reset all counters!
+	for(auto it : screenObjectCounter){
+		it.second = 0;
+	}
+
+	for(auto it : shownObjects){
+		it.second = 1;
+	}
+
+	for(int i = 0; i < newObjects.size(); i++){
+		auto it = find(allWeightedObjects.begin(), allWeightedObjects.end(), newObjects[i]);
+		if(it != allWeightedObjects.end()){
+			screenObjectCounter[newObjects[i]] = 0;
+			shownObjects.insert(make_pair(newObjects[i], 1));
+			newObjects[i]->manager = this;
+			allWeightedObjects.push_back(newObjects[i]);
+		}else{
+			ofLogError("WeightedObjectManager") << "Trying to add weightable object that already exists! ignoring object!";
+		}
+	}
 }
 
 
@@ -228,7 +256,7 @@ void WeightedObjectManager::drawDebug(int x, int y, int limit){
 
 			//add on screen weight
 			float www = 100 * obj->getMappedWeight();
-			int ww = ofClamp(int(www), -99, 100);
+			int ww = ofClamp(int(www), -99, 99);
 			sprintf(aux, "%+03d", ww); //trim float to 3 chars
 			out[2] += "[" + string(aux) + "] " ;
 
