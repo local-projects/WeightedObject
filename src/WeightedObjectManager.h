@@ -103,6 +103,7 @@ public:
 
 	//ask me what object should come on screen next
 	Weightable* getNextObject(bool itsOkIfItsOnScreen = false);
+	Weightable* getNextObject(bool itsOkIfItsOnScreen, vector<Weightable*> ignoreList);
 	//retrieve an obj according to their weight;
 	//this makes sure your objects show time is balanced as their weight defines.
 

@@ -166,8 +166,12 @@ bool WeightedObjectManager::objectExists(Weightable* obj){
 	return (find(allWeightedObjects.begin(), allWeightedObjects.end(), obj) != allWeightedObjects.end());
 }
 
-
 Weightable* WeightedObjectManager::getNextObject(bool itsOkIfItsOnScreen){
+	vector<Weightable*> ignoreList;
+	return getNextObject(itsOkIfItsOnScreen, ignoreList);
+}
+
+Weightable* WeightedObjectManager::getNextObject(bool itsOkIfItsOnScreen, vector<Weightable*> ignoreList){
 
 	WeightedObjectsSet::iterator it;
 	Weightable* myResult = NULL;
@@ -181,8 +185,11 @@ Weightable* WeightedObjectManager::getNextObject(bool itsOkIfItsOnScreen){
 		if (!onScreen || itsOkIfItsOnScreen){
 			pair< Weightable*, int> p = *it;
 			Weightable* candidate = p.first;
-			myResult = candidate;
-			break;
+			auto isItThere = find(ignoreList.begin(), ignoreList.end(), candidate);
+			if(isItThere == ignoreList.end()){
+				myResult = candidate;
+				break;
+			}
 		}
 	}
 	if (myResult == NULL){
