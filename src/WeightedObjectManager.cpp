@@ -123,6 +123,21 @@ void WeightedObjectManager::addExtraObjects(vector<Weightable*> newObjects, bool
 }
 
 
+void WeightedObjectManager::resetCounters(){
+
+	WeightedObjectsSet newSet; //we need to make an entirely new set, we cant change values on the live set
+	for(auto it : shownObjects){
+		newSet.insert(make_pair(it.first, 1));
+	}
+	
+	for(auto & it : screenObjectCounter){
+		it.second = 0;
+	}
+
+	shownObjects = newSet; //overwrite the set, reset all counters
+
+}
+
 void WeightedObjectManager::objectEnteredScreen(Weightable* o){
 
 	if (find(allWeightedObjects.begin(), allWeightedObjects.end(), o) != allWeightedObjects.end()){

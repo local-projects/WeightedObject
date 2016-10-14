@@ -91,6 +91,8 @@ public:
 
 	//in case we get new objects on the fly / liveUpdate
 	void addExtraObjects(vector<Weightable*> newObjects, bool resetCounters);
+	
+	void resetCounters();
 
 	//let me know what's going on with the objects
 	void objectEnteredScreen(Weightable*);
