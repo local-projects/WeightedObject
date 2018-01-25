@@ -99,12 +99,14 @@ void WeightedObjectManager::addExtraObjects(vector<Weightable*> newObjects, bool
 		if(resetCounters){
 			newSet.insert(make_pair(it.first, 1));
 		}else{
-			newSet.insert(make_pair(it.first, (int)ofRandom(1, 3)));
+			newSet.insert(make_pair(it.first, it.second));
 		}
 	}
 
-	for(auto & it : screenObjectCounter){
-		it.second = 0;
+	if (resetCounters) {
+		for (auto & it : screenObjectCounter) {
+			it.second = 0;
+		}
 	}
 
 	for(int i = 0; i < newObjects.size(); i++){
