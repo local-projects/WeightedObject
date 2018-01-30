@@ -103,11 +103,11 @@ void WeightedObjectManager::addExtraObjects(vector<Weightable*> newObjects, bool
 		}
 	}
 
-	if (resetCounters) {
+	//if (resetCounters) {
 		for (auto & it : screenObjectCounter) {
 			it.second = 0;
 		}
-	}
+	//}
 
 	for(int i = 0; i < newObjects.size(); i++){
 		auto it = find(allWeightedObjects.begin(), allWeightedObjects.end(), newObjects[i]);
